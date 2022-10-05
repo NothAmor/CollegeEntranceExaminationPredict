@@ -96,3 +96,7 @@ def spider(request):
             data = pd.concat(tempdf)
             data.to_csv(os.path.join(BASE_DIR, 'static', 'csv', "{year}_{province}.csv".format(year=year, province=province)), index=None, encoding="utf-8")
             return HttpResponse("爬取成功")
+
+
+def preview(request):
+    return HttpResponse("test")
