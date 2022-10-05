@@ -98,5 +98,5 @@ def spider(request):
             return HttpResponse("爬取成功")
 
 
-def preview(request):
+def predict(request):
     return HttpResponse("test")

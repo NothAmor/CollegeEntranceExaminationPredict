@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('spider', views.spider, name='spider'),
-    path('preview', views.preview, name='preview'),
+    path('predict', views.predict, name='predict'),
 ]

@@ -29,5 +29,8 @@ def preview(request):
         print("GG")
         return render(request, "preview.html", locals())
 
+def predict(request):
+    return render(request, "predict.html")
+
 def minimal(request):
     return render(request, "minimal.html")
