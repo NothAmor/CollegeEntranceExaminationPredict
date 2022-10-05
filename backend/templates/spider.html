@@ -1,0 +1,114 @@
+{% load static %}
+{% include './common/common_header.html' %}
+
+<body id="page-top">
+        {% include './common/common_siderbar.html' %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {% include './common/common_topbar.html' %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">爬取数据</h1>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Content Column -->
+                        <div class="col-lg-6 mb-4">
+                            <!-- Basic Card Example -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">爬取数据</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">爬取一分一段数据</h1>
+                                    </div>
+                                    <form class="spider" method="POST" action="/api/spider">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            请选择爬取省份：
+                                            <select class="form-select" name="province" id="province" style="border-radius: 20px;">
+                                                <option value="北京" selected>北京</option>
+                                                <option value="天津">天津</option>
+                                                <option value="河北">河北</option>
+                                                <option value="山西">山西</option>
+                                                <option value="内蒙古">内蒙古</option>
+                                                <option value="辽宁">辽宁</option>
+                                                <option value="吉林">吉林</option>
+                                                <option value="黑龙江">黑龙江</option>
+                                                <option value="上海">上海</option>
+                                                <option value="江苏">江苏</option>
+                                                <option value="浙江">浙江</option>
+                                                <option value="安徽">安徽</option>
+                                                <option value="福建">福建</option>
+                                                <option value="江西">江西</option>
+                                                <option value="山东">山东</option>
+                                                <option value="河南">河南</option>
+                                                <option value="湖北">湖北</option>
+                                                <option value="湖南">湖南</option>
+                                                <option value="广东">广东</option>
+                                                <option value="广西">广西</option>
+                                                <option value="海南">海南</option>
+                                                <option value="重庆">重庆</option>
+                                                <option value="四川">四川</option>
+                                                <option value="贵州">贵重</option>
+                                                <option value="云南">云南</option>
+                                                <option value="陕西">陕西</option>
+                                                <option value="甘肃">甘肃</option>
+                                                <option value="青海">青海</option>
+                                                <option value="宁夏">宁夏</option>
+                                                <option value="新疆">新疆</option>
+                                              </select>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 40px;">
+                                            请选择爬取年份：
+                                            <select class="form-select" name="year" id="year" style="border-radius: 20px;">
+                                                <option value="2022">2022</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2018">2018</option>
+                                              </select>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" style="margin-bottom: 40px;" value="开始爬取">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-4">
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            {% include './common/common_footer.html' %}
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+</body>
+
+</html>

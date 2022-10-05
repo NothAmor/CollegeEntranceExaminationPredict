@@ -11,6 +11,6 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 locationList = soup.find_all(name="a", attrs={"class": "sch-cell"})
 
-for location in locationList[:-5]:
+for location in locationList[-5:]:
     print(location.string)
     print(location["href"])
