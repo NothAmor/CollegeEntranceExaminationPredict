@@ -38,13 +38,16 @@
 
 ## 部署教程
 
-* 安装Django
-
-  `pip install django`
-
 * 克隆本repo
 
   `git clone https://git.nothamor.cn:3000/NothAmor/CollegeEntranceExaminationPredict.git`
+
+* 安装运行库
+
+  ```shell
+  cd CollegeEntranceExaminationPredict
+  pip install -r requirements.txt
+  ```
 
 * 运行项目
 

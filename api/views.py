@@ -1,12 +1,10 @@
-from genericpath import isfile
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from pathlib import Path
-from . import models
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from sklearn import linear_model
 import re
 import os
 
@@ -51,7 +49,7 @@ def spider(request):
             data.to_csv(os.path.join(BASE_DIR, 'static', 'csv', "{year}_{province}.csv".format(year=year, province=province)), index=None, encoding="utf-8")
             #models.FenDuan.objects.create()
 
-            return HttpResponse("爬取成功")
+            return HttpResponseRedirect("/main/spider")
         else:
             # 先随便爬一个页面
             rankingUrl = "http://www.creditsailing.com/school/yfyd/11/2022/3/2691352.html"
@@ -95,8 +93,53 @@ def spider(request):
             tempdf = pd.read_html(rightUrl)
             data = pd.concat(tempdf)
             data.to_csv(os.path.join(BASE_DIR, 'static', 'csv', "{year}_{province}.csv".format(year=year, province=province)), index=None, encoding="utf-8")
-            return HttpResponse("爬取成功")
+            return HttpResponseRedirect("/main/spider")
 
 
 def predict(request):
-    return HttpResponse("test")
+    if request.method == "POST":
+        # 获取POST变量
+        province = request.POST.get("province")
+        year = request.POST.get("year")
+        grade = request.POST.get("grade")
+
+        # 判断该省份是否存在五年数据
+        fileStatus = False
+        for i in range(2018, 2023):
+            filename = "{year}_{province}.csv".format(year=i, province=province)
+            if Path(os.path.join(BASE_DIR, 'static', 'csv', filename)).exists():
+                fileStatus = True
+                break
+        
+        # 不存在五年数据，跳出
+        if fileStatus == False:
+            return HttpResponse("请求失败，请提前爬取该省份5年高考一分一段数据")
+
+        # 开始分析
+        xdata = []
+
+        # 读取五年数据
+        data1 = pd.read_csv(os.path.join(BASE_DIR, 'static', 'csv', '2022_{province}.csv'.format(province=province)))
+        data2 = pd.read_csv(os.path.join(BASE_DIR, 'static', 'csv', '2021_{province}.csv'.format(province=province)))
+        data3 = pd.read_csv(os.path.join(BASE_DIR, 'static', 'csv', '2020_{province}.csv'.format(province=province)))
+        data4 = pd.read_csv(os.path.join(BASE_DIR, 'static', 'csv', '2019_{province}.csv'.format(province=province)))
+        data5 = pd.read_csv(os.path.join(BASE_DIR, 'static', 'csv', '2018_{province}.csv'.format(province=province)))
+
+        # 将五年数据合并到一起
+        mergedData = pd.concat([data1, data2, data3, data4, data5])
+        # 初始化线性回归预测模型
+        lm = linear_model.LinearRegression()
+        
+        # 预处理分数数据集
+        for index, row in mergedData.iterrows():
+            xdata.append([row["分数"]])
+        
+        # 初始化xy轴
+        X = xdata
+        y = mergedData["建议位次"]
+        model = lm.fit(X, y)
+        # print(model.intercept_, model.coef_)
+
+        return HttpResponse("预测成功，预测你在{year}年{province}省高考排名位次是{result}".format(year=year, province=province, result=int(model.predict([[int(grade)]])[0])))
+    else:
+        return HttpResponse("错误请求API方法")

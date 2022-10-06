@@ -83,8 +83,26 @@
                                                 id="grade" name="grade" placeholder="输入想要预测的分数"
                                                 style="border-radius: 20px;">
                                         </div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block" style="margin-bottom: 40px;" value="开始爬取">
+                                        <button type="button" id="submitBtn" class="btn btn-primary btn-user btn-block"
+                                        style="margin-bottom: 40px;">开始预测</button>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-4">
+                            <!-- Collapsable Card Example -->
+                            <div class="card shadow mb-4" id="predictResultCard" style="display: none;">
+                                <!-- Card Header - Accordion -->
+                                <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+                                    role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                    <h6 class="m-0 font-weight-bold text-primary">预测结果</h6>
+                                </a>
+                                <!-- Card Content - Collapse -->
+                                <div class="collapse show">
+                                    <div class="card-body">
+                                        <p id="predictResult"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -97,6 +115,41 @@
             <!-- End of Main Content -->
 
             {% include './common/common_footer.html' %}
+            <script>
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                const csrftoken = getCookie('csrftoken');
+
+                $("#submitBtn").click(function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/predict",
+                        data: {
+                            "province": $("#province option:selected").val(),
+                            "year": $("#year option:selected").val(),
+                            "grade": $("#grade").val(),
+                            "csrfmiddlewaretoken": csrftoken
+                        },
+                        success: function(data) {
+                            $("#predictResultCard").css("display", "block");
+                            $("#predictResult").html(data);
+                        }
+                    })
+                });
+            </script>
 
         </div>
         <!-- End of Content Wrapper -->
